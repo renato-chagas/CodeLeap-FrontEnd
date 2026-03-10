@@ -1,0 +1,270 @@
+/* Main page layout*/
+.MainPage {
+  min-height: 100dvh;
+  width: 100%;
+  padding: 28px 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.MainContainer {
+  width: 100%;
+  max-width: 800px;
+  border: 1px solid #d2d2d2;
+  background: #fff;
+}
+
+.MainHeader {
+  background: #7695ec;
+  color: #fff;
+  padding: 20px 28px;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+/*Post Create Card*/
+.CreatePostCard {
+  margin: 24px;
+  border: 1px solid #cfcfcf;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.CreatePostCard h2 {
+  font-size: 1.35rem;
+  margin-bottom: 12px;
+}
+
+.CreatePostCard form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.CreatePostCard label {
+  font-size: 0.875rem;
+  color: #444;
+}
+
+.CreatePostCard input,
+.CreatePostCard textarea {
+  width: 100%;
+  border: 1px solid #bdbdbd;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
+.CreatePostCard textarea {
+  resize: vertical;
+}
+
+/*Create Button*/
+.CreateButton {
+  align-self: flex-end;
+  border: 0;
+  background: #7695ec;
+  color: #fff;
+  font-weight: 700;
+  border-radius: 6px;
+  padding: 6px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.CreateButton:disabled {
+  background: #9faedb;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+/*Pots List*/
+.PostList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 0 24px 24px;
+}
+
+/*Post Card*/
+.PostCard {
+  border: 1px solid #b9b9b9;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.PostCardHeader {
+  background: #7695ec;
+  color: #fff;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.PostCardHeader h3 {
+  font-size: 1.1rem;
+}
+
+.PostActions {
+  display: flex;
+  gap: 12px;
+}
+
+.IconButton {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.IconButton img {
+  width: 18px;
+  height: 18px;
+}
+
+.PostMeta {
+  display: flex;
+  justify-content: space-between;
+  color: #7f7f7f;
+  font-size: 0.9rem;
+  padding: 14px 20px 0;
+}
+
+.PostCard p {
+  color: #4a4a4a;
+  line-height: 1.35;
+  font-size: 0.95rem;
+  padding: 14px 20px 20px;
+}
+
+/*Modal base*/
+.ModalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(119, 119, 119, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  padding: 16px;
+}
+
+/*Delete Modal*/
+.DeleteModal {
+  width: 100%;
+  max-width: 660px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.DeleteModal h4 {
+  font-size: 1.35rem;
+  margin: 0 0 24px;
+}
+
+.DeleteModalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+}
+
+.ModalCancelButton,
+.ModalDeleteButton {
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ModalCancelButton {
+  background: #fff;
+  border: 1px solid #999;
+  color: #000;
+}
+
+.ModalDeleteButton {
+  background: #ff5151;
+  border: 1px solid #ff5151;
+  color: #fff;
+}
+
+.ModalCancelButton:disabled,
+.ModalDeleteButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/*Edit Modal*/
+.EditModal {
+  width: 100%;
+  max-width: 660px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.EditModal h4 {
+  font-size: 1.35rem;
+  margin: 0 0 14px;
+}
+
+.EditModal input,
+.EditModal textarea {
+  width: 100%;
+  border: 1px solid #bdbdbd;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+}
+
+.EditModalActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.ModalSaveButton {
+  background: #47b960;
+  border: 1px solid #47b960;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.ModalSaveButton:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/*Responsive */
+@media (max-width: 640px) {
+  .MainHeader {
+    padding: 18px;
+    font-size: 1.15rem;
+  }
+
+  .CreatePostCard {
+    margin: 16px;
+    padding: 16px;
+  }
+
+  .PostList {
+    margin: 0 16px 16px;
+    padding: 0;
+    gap: 16px;
+  }
+}
