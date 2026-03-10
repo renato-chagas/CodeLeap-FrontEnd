@@ -10,11 +10,7 @@ export async function getPosts(): Promise<Post[]> {
   return response.data.results
 }
 
-export async function createPost(data: {
-  username: string
-  title: string
-  content: string
-}): Promise<CreatePostDTO> {
+export async function createPost(data: CreatePostDTO): Promise<Post> {
   const response = await api.post<Post>("", data)
   return response.data
 }
