@@ -1,4 +1,5 @@
 import axios from "axios"
+
 import type { Post, PostsResponse, CreatePostDTO } from "../types/type"
 
 const api = axios.create({
