@@ -39,11 +39,15 @@ export default function PostCard({ post, reloadPosts }: Props) {
   const loggedUsername = (localStorage.getItem("username") ?? "")
     .trim()
     .toLowerCase();
-  const canDelete = loggedUsername === post.username.trim().toLowerCase();
+  const canManage = loggedUsername === post.username.trim().toLowerCase();
   const canSave =
-    editTitle.trim() !== "" && editContent.trim() !== "" && !editing;
+    canManage &&
+    editTitle.trim() !== "" &&
+    editContent.trim() !== "" &&
+    !editing;
 
   function handleOpenEdit() {
+    if (!canManage) return;
     setEditTitle(post.title);
     setEditContent(post.content);
     setIsEditModalOpen(true);
@@ -70,7 +74,7 @@ export default function PostCard({ post, reloadPosts }: Props) {
   }
 
   async function handleConfirmDelete() {
-    if (!canDelete) {
+    if (!canManage) {
       setIsDeleteModalOpen(false);
       return;
     }
@@ -95,7 +99,7 @@ export default function PostCard({ post, reloadPosts }: Props) {
           <h3>{post.title}</h3>
 
           <div className="PostActions">
-            {canDelete && (
+            {canManage && (
               <button
                 type="button"
                 className="IconButton"
@@ -105,13 +109,15 @@ export default function PostCard({ post, reloadPosts }: Props) {
               </button>
             )}
 
-            <button
-              type="button"
-              className="IconButton"
-              onClick={handleOpenEdit}
-            >
-              <img src={editIcon} alt="Edit post" />
-            </button>
+            {canManage && (
+              <button
+                type="button"
+                className="IconButton"
+                onClick={handleOpenEdit}
+              >
+                <img src={editIcon} alt="Edit post" />
+              </button>
+            )}
           </div>
         </header>
 
@@ -123,7 +129,7 @@ export default function PostCard({ post, reloadPosts }: Props) {
         <p>{post.content}</p>
       </article>
 
-      {isDeleteModalOpen && canDelete && (
+      {isDeleteModalOpen && canManage && (
         <div className="ModalOverlay" role="dialog" aria-modal="true">
           <div className="DeleteModal">
             <h4>Are you sure you want to delete this item?</h4>
@@ -151,7 +157,7 @@ export default function PostCard({ post, reloadPosts }: Props) {
         </div>
       )}
 
-      {isEditModalOpen && (
+      {isEditModalOpen && canManage && (
         <div className="ModalOverlay" role="dialog" aria-modal="true">
           <form className="EditModal" onSubmit={handleConfirmEdit}>
             <h4>Edit item</h4>
