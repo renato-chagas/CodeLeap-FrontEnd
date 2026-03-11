@@ -1,8 +1,11 @@
-.LayoutSignup {
-    min-height: 100dvh;
-    width: 100%;
-    display: grid;
-    place-items: center;
+.LoginModalOverlay {
+    position: fixed;
+    inset: 0;
+    background: #777777;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
     padding: 24px;
 }
 

@@ -1,79 +1,90 @@
-import { useState } from "react"
-import type { Post } from "../../types/type"
-import { deletePost, updatePost } from "../../services/api"
-import editIcon from "../../assets/icons/edit.svg"
-import deleteIcon from "../../assets/icons/delete.svg"
+import { useState } from "react";
+import type { Post } from "../../types/type";
+import { deletePost, updatePost } from "../../services/api";
+import editIcon from "../../assets/icons/edit.svg";
+import deleteIcon from "../../assets/icons/delete.svg";
 
 type Props = {
-  post: Post
-  reloadPosts: () => void | Promise<void>
-}
+  post: Post;
+  reloadPosts: () => void | Promise<void>;
+};
 
 function formatPostTime(value: string): string {
-  const postDate = new Date(value)
-  const now = new Date()
-  const diffMs = now.getTime() - postDate.getTime()
-  const diffMinutes = Math.floor(diffMs / 60000)
+  const postDate = new Date(value);
+  const now = new Date();
+  const diffMs = now.getTime() - postDate.getTime();
+  const diffMinutes = Math.floor(diffMs / 60000);
 
-  if (diffMinutes < 1) return "just now"
-  if (diffMinutes < 60) return `${diffMinutes} minute${diffMinutes > 1 ? "s" : ""} ago`
+  if (diffMinutes < 1) return "now";
+  if (diffMinutes < 60)
+    return `${diffMinutes} minute${diffMinutes > 1 ? "s" : ""} ago`;
 
-  const diffHours = Math.floor(diffMinutes / 60)
-  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`
+  const diffHours = Math.floor(diffMinutes / 60);
+  if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
 
-  const diffDays = Math.floor(diffHours / 24)
-  return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`
+  const diffDays = Math.floor(diffHours / 24);
+  return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
 }
 
 export default function PostCard({ post, reloadPosts }: Props) {
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
-  const [deleting, setDeleting] = useState(false)
-  const [editing, setEditing] = useState(false)
+  const [deleting, setDeleting] = useState(false);
+  const [editing, setEditing] = useState(false);
 
-  const [editTitle, setEditTitle] = useState(post.title)
-  const [editContent, setEditContent] = useState(post.content)
+  const [editTitle, setEditTitle] = useState(post.title);
+  const [editContent, setEditContent] = useState(post.content);
 
-  const canSave = editTitle.trim() !== "" && editContent.trim() !== "" && !editing
+  const loggedUsername = (localStorage.getItem("username") ?? "")
+    .trim()
+    .toLowerCase();
+  const canDelete = loggedUsername === post.username.trim().toLowerCase();
+  const canSave =
+    editTitle.trim() !== "" && editContent.trim() !== "" && !editing;
 
   function handleOpenEdit() {
-    setEditTitle(post.title)
-    setEditContent(post.content)
-    setIsEditModalOpen(true)
+    setEditTitle(post.title);
+    setEditContent(post.content);
+    setIsEditModalOpen(true);
   }
 
   async function handleConfirmEdit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (!canSave) return
+    event.preventDefault();
+    if (!canSave) return;
 
     try {
-      setEditing(true)
+      setEditing(true);
       await updatePost(post.id, {
         title: editTitle.trim(),
-        content: editContent.trim()
-      })
-      setIsEditModalOpen(false)
-      await Promise.resolve(reloadPosts())
+        content: editContent.trim(),
+      });
+      setIsEditModalOpen(false);
+      await Promise.resolve(reloadPosts());
     } catch (error) {
-      console.error(error)
-      alert("Could not update post.")
+      console.error(error);
+      alert("Could not update post.");
     } finally {
-      setEditing(false)
+      setEditing(false);
     }
   }
 
   async function handleConfirmDelete() {
+    if (!canDelete) {
+      setIsDeleteModalOpen(false);
+      return;
+    }
+
     try {
-      setDeleting(true)
-      await deletePost(post.id)
-      setIsDeleteModalOpen(false)
-      await Promise.resolve(reloadPosts())
+      setDeleting(true);
+      await deletePost(post.id);
+      setIsDeleteModalOpen(false);
+      await Promise.resolve(reloadPosts());
     } catch (error) {
-      console.error(error)
-      alert("Could not delete post.")
+      console.error(error);
+      alert("Could not delete post.");
     } finally {
-      setDeleting(false)
+      setDeleting(false);
     }
   }
 
@@ -84,13 +95,15 @@ export default function PostCard({ post, reloadPosts }: Props) {
           <h3>{post.title}</h3>
 
           <div className="PostActions">
-            <button
-              type="button"
-              className="IconButton"
-              onClick={() => setIsDeleteModalOpen(true)}
-            >
-              <img src={deleteIcon} alt="Delete post" />
-            </button>
+            {canDelete && (
+              <button
+                type="button"
+                className="IconButton"
+                onClick={() => setIsDeleteModalOpen(true)}
+              >
+                <img src={deleteIcon} alt="Delete post" />
+              </button>
+            )}
 
             <button
               type="button"
@@ -110,7 +123,7 @@ export default function PostCard({ post, reloadPosts }: Props) {
         <p>{post.content}</p>
       </article>
 
-      {isDeleteModalOpen && (
+      {isDeleteModalOpen && canDelete && (
         <div className="ModalOverlay" role="dialog" aria-modal="true">
           <div className="DeleteModal">
             <h4>Are you sure you want to delete this item?</h4>
@@ -183,5 +196,5 @@ export default function PostCard({ post, reloadPosts }: Props) {
         </div>
       )}
     </>
-  )
+  );
 }
